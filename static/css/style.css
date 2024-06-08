@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar-heading {
+    font-size: 1.5em;
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 10px;
+    background: #f8f9fa;
+    border-top: 1px solid #e7e7e7;
+}
+
+.list-group-item-action {
+    padding: 10px 15px;
+}
+
+.container-fluid {
+    padding: 20px;
+}
+
+.btn-primary {
+    margin: 10px 0;
+}

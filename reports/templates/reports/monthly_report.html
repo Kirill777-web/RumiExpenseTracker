@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Monthly Report</h2>
+    <div>
+        <p>Total Expenses: {{ sum_expenses }}</p>
+        <p>Total Income: {{ sum_income }}</p>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in addmoney_info %}
+            <tr>
+                <td>{{ item.Date }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.Category }}</td>
+                <td>{{ item.add_money }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

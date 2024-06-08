@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="loginuname">Username:</label>
+            <input type="text" class="form-control" id="loginuname" name="loginuname" required>
+        </div>
+        <div class="form-group">
+            <label for="loginpassword1">Password:</label>
+            <input type="password" class="form-control" id="loginpassword1" name="loginpassword1" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <a href="{% url 'register' %}">Register</a>
+</div>
+{% endblock %}

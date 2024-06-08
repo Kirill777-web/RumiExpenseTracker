@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Charts</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Pie Chart</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h3>Bar Chart</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data for the pie chart
+    var pieData = {
+        labels: ['Category 1', 'Category 2', 'Category 3'],
+        datasets: [{
+            data: [10, 20, 30],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        }]
+    };
+
+    // Data for the bar chart
+    var barData = {
+        labels: ['January', 'February', 'March'],
+        datasets: [{
+            label: 'Expenses',
+            data: [30, 20, 50],
+            backgroundColor: '#36A2EB',
+        }]
+    };
+
+    // Create pie chart
+    var ctxPie = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'pie',
+        data: pieData
+    });
+
+    // Create bar chart
+    var ctxBar = document.getElementById('barChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: barData
+    });
+</script>
+{% endblock %}

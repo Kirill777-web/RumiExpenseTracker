@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Add Money</h2>
+    <form method="POST" action="{% url 'addmoney_submission' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="add_money">Add Money:</label>
+            <input type="text" class="form-control" id="add_money" name="add_money" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" required>
+        </div>
+        <div class="form-group">
+            <label for="Date">Date:</label>
+            <input type="date" class="form-control" id="Date" name="Date" required>
+        </div>
+        <div class="form-group">
+            <label for="Category">Category:</label>
+            <input type="text" class="form-control" id="Category" name="Category" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

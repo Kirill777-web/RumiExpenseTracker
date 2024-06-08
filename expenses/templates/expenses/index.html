@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Expenses</h2>
+    <ul class="list-group">
+        {% for expense in page_obj %}
+            <li class="list-group-item">
+                {{ expense.description }}: {{ expense.quantity }} - {{ expense.Category }} ({{ expense.Date }})
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="pagination mt-3">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                {% endif %}
+
+                <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

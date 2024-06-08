@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Profile</h2>
+    <form method="POST" action="{% url 'profile_update' user.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="fname">First Name:</label>
+            <input type="text" class="form-control" id="fname" name="fname" value="{{ user.first_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="lname">Last Name:</label>
+            <input type="text" class="form-control" id="lname" name="lname" value="{{ user.last_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        <div class="form-group">
+            <label for="savings">Savings:</label>
+            <input type="number" class="form-control" id="savings" name="savings" value="{{ user.userprofile.savings }}" required>
+        </div>
+        <div class="form-group">
+            <label for="income">Income:</label>
+            <input type="number" class="form-control" id="income" name="income" value="{{ user.userprofile.income }}" required>
+        </div>
+        <div class="form-group">
+            <label for="profession">Profession:</label>
+            <input type="text" class="form-control" id="profession" name="profession" value="{{ user.userprofile.profession }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}

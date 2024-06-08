@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Tables</h1>
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through your expense data here -->
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.Date }}</td>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.quantity }}</td>
+                <td>{{ expense.Category }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
+</script>
+{% endblock %}
