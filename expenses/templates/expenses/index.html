@@ -57,7 +57,7 @@
                     <ul class="list-group mb-4">
                         {% for expense in page_obj %}
                             <li class="list-group-item">
-                                {{ forloop.counter }}. {{ expense.add_money }}: {{ expense.quantity }}$ - {{ expense.Category }} ({{ expense.Date|date:"F j, Y, g:i a" }})
+                                {{ forloop.counter0|add:page_obj.start_index }}. {{ expense.add_money }}: {{ expense.quantity }}$ - {{ expense.Category }} {{expense.description}} ({{ expense.Date|date:"F j, Y, g:i a" }})
                             </li>
                         {% endfor %}
                     </ul>
