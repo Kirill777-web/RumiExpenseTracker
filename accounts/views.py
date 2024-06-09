@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
@@ -62,11 +63,12 @@ def handlelogin(request):
 
 
 def handleLogout(request):
-    del request.session['is_logged']
-    del request.session["user_id"]
-    logout(request)
-    messages.success(request, "Successfully logged out")
-    return redirect('home')
+    if 'is_logged' in request.session:
+        del request.session['is_logged']
+    if 'user_id' in request.session:
+        del request.session['user_id']
+    auth_logout(request)
+    return redirect('login')
 
 
 @login_required
@@ -84,7 +86,7 @@ def profile(request):
 
         user_profile.save()
         messages.success(request, 'Profile updated successfully.')
-        return redirect('profile')
+        return redirect('index')
     return render(request, 'accounts/profile.html', {'profile': user_profile})
 
 

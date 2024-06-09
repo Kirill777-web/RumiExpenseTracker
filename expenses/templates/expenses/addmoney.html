@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container narrow-container">
     <h2>{% if add_money %}Update Entry{% else %}Add Entry{% endif %}</h2>
     <form method="POST" action="{% if add_money %}{% url 'addmoney_update' id %}{% else %}{% url 'addmoney_submission' %}{% endif %}">
         {% csrf_token %}

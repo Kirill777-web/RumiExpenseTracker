@@ -1,5 +1,6 @@
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
@@ -8,6 +9,7 @@ from accounts.models import UserProfile
 from .models import AddMoneyInfo
 
 
+@login_required
 def index(request):
     if request.session.has_key('is_logged'):
         todays_date = datetime.date.today()
@@ -47,6 +49,7 @@ def index(request):
     return redirect('home')
 
 
+@login_required
 def addmoney(request):
     categories = ["Food", "Transport", "Entertainment",
                   "Health", "Other", "Shopping", "Rent", "Bills", "Salary"]

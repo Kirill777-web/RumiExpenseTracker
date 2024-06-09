@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container narrow-container">
     <h2>Login</h2>
     <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
@@ -15,6 +15,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
-    <a href="{% url 'register' %}">Register</a>
+    <a href="{% url 'register' %}"class="btn btn-logout">Register</a>
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container narrow-container">
     <h2>Edit Profile</h2>
     <form method="POST" action="{% url 'profile_update' user.id %}">
         {% csrf_token %}

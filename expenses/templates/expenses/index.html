@@ -1,71 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h2 class="mt-4 mb-4">Dashboard</h2>
+<div class="container-fluid">
+    <h2 class="mt-4 mb-4 text-center">Dashboard</h2>
 
     <!-- Statistics Summary -->
     <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-header">Total Income</div>
-                <div class="card-body">
+            <div class="card bg-success mb-3">
+                <div class="card-header text-center">Total Income</div>
+                <div class="card-body text-white text-center">
                     <h5 class="card-title">{{ total_income }}$</h5>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-header">Total Expenses</div>
-                <div class="card-body">
+            <div class="card bg-danger mb-3">
+                <div class="card-header text-center">Total Expenses</div>
+                <div class="card-body text-white text-center">
                     <h5 class="card-title">{{ total_expenses }}$</h5>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">Remaining Balance</div>
-                <div class="card-body">
+            <div class="card bg-primary mb-3">
+                <div class="card-header text-center">Remaining Balance</div>
+                <div class="card-body text-white text-center">
                     <h5 class="card-title">{{ remaining_balance }}$</h5>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Charts -->
+    <!-- Charts and Recent Transactions -->
     <div class="row mb-4">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
-                <div class="card-header">Income vs Expenses</div>
+                <div class="card-header text-center">Income vs Expenses</div>
                 <div class="card-body">
                     <canvas id="incomeExpenseChart"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
-                <div class="card-header">Category Breakdown</div>
+                <div class="card-header text-center">Category Breakdown</div>
                 <div class="card-body">
                     <canvas id="categoryChart"></canvas>
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-center">Recent Transactions</div>
+                <div class="card-body">
+                    <ul class="list-group mb-4">
+                        {% for expense in page_obj %}
+                            <li class="list-group-item">
+                                {{ forloop.counter }}. {{ expense.add_money }}: {{ expense.quantity }}$ - {{ expense.Category }} ({{ expense.Date|date:"F j, Y, g:i a" }})
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Recent Transactions -->
-    <h3 class="mb-3">Recent Transactions</h3>
-    <ul class="list-group mb-4">
-        {% for expense in page_obj %}
-            <li class="list-group-item">
-                {{ forloop.counter }}. {{ expense.add_money }}: {{ expense.quantity }}$ - {{ expense.Category }} ({{ expense.Date|date:"F j, Y, g:i a" }})
-            </li>
-        {% endfor %}
-    </ul>
     
     <!-- Pagination -->
     <div class="pagination mt-3">
         <nav>
-            <ul class="pagination">
+            <ul class="pagination justify-content-center mb-0">
                 {% if page_obj.has_previous %}
                     <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
                     <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>

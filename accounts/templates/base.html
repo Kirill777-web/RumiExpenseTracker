@@ -7,35 +7,55 @@
     <title>Expense Tracker</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
-        <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading">Expense Tracker</div>
-            <div class="list-group list-group-flush">
-                {% comment %} <a href="{% url 'home' %}" class="list-group-item list-group-item-action bg-light">Home</a> {% endcomment %}
-                <a href="{% url 'index' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-                <a href="{% url 'addmoney' %}" class="list-group-item list-group-item-action bg-light">Add Money</a>
-                <a href="{% url 'profile' %}" class="list-group-item list-group-item-action bg-light">Profile</a>
-                <a href="{% url 'stats' %}" class="list-group-item list-group-item-action bg-light">Stats</a>
-                <a href="{% url 'charts' %}" class="list-group-item list-group-item-action bg-light">Charts</a>
-                <a href="{% url 'tables' %}" class="list-group-item list-group-item-action bg-light">Tables</a>
-                <a href="{% url 'weekly' %}" class="list-group-item list-group-item-action bg-light">Weekly</a>
-                <a href="{% url 'expense_month' %}" class="list-group-item list-group-item-action bg-light">Monthly</a>
-                <a href="{% url 'info_year' %}" class="list-group-item list-group-item-action bg-light">Yearly</a>
-                <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a>
+        <div class="bg-dark border-right d-flex flex-column" id="sidebar-wrapper">
+            <div class="sidebar-heading text-white">Expense Tracker</div>
+            <div class="list-group list-group-flush flex-grow-1">
+                <a href="{% url 'index' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="{% url 'addmoney' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-plus"></i> Add Money
+                </a>
+                <a href="{% url 'profile' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="{% url 'stats' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-chart-line"></i> Stats
+                </a>
+                <a href="{% url 'charts' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-chart-pie"></i> Charts
+                </a>
+                <a href="{% url 'tables' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-table"></i> Tables
+                </a>
+                <a href="{% url 'weekly' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-calendar-week"></i> Weekly
+                </a>
+                <a href="{% url 'expense_month' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-calendar-alt"></i> Monthly
+                </a>
+                <a href="{% url 'info_year' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-calendar"></i> Yearly
+                </a>
             </div>
-            <div class="sidebar-footer text-center">
-                Logged in as: {{ user.username }}
-            </div>
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-danger text-white mt-auto">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </div>
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+                {% comment %} <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button> {% endcomment %}
+                <div class="ml-auto">
+                    {{ user.username }}
+                </div>
             </nav>
 
             <div class="container-fluid">
@@ -48,7 +68,7 @@
     <!-- /#wrapper -->
      <!-- Footer -->
     <footer>
-        <p>Expense Tracker &copy; 2024</p>
+        <p>Expense Tracker &copy; Made by Kirill Lazutin 2024</p>
     </footer>
 
     <!-- Bootstrap core JavaScript -->
