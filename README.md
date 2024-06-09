@@ -33,7 +33,6 @@ RumiExpenseTracker is a comprehensive expense tracking web application designed 
 - Responsive Design
 - Data Visualization using Chart.js
 - Pagination for Transactions
-- Role-based Access Control
 
 ## 🔗 Links
 
