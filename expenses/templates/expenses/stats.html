@@ -1,41 +1,97 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container stats-container">
     <h2 class="mt-4 mb-4 text-center">Statistics</h2>
-    <h3>Expense Summary for the Last 30 Days:</h3>
-    <ul class="list-group mb-4">
-        <li class="list-group-item">Total Expenses: {{ total_expenses }}</li>
-        <li class="list-group-item">Total Income: {{ total_income }}</li>
-        <li class="list-group-item">Remaining Savings: {{ remaining_savings }}</li>
-        <li class="list-group-item">Amount Over Budget: {{ over_budget }}</li>
-    </ul>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>Expense Summary for the Last 30 Days:</h3>
+            <ul class="list-group mb-4">
+                <li class="list-group-item">Total Expenses: {{ total_expenses }}</li>
+                <li class="list-group-item">Total Income: {{ total_income }}</li>
+                <li class="list-group-item">Remaining Savings: {{ remaining_savings }}</li>
+                <li class="list-group-item">Amount Over Budget: {{ over_budget }}</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3 class="mb-3">Top Expense Categories</h3>
+            <ul class="list-group">
+                {% for category, amount in top_expense_categories %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ category }}
+                        <span class="badge badge-primary badge-pill">{{ amount }}$</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
-    <h3 class="mb-3">Expense Tables</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.Date|date:"F j, Y" }}</td>
-                <td>{{ expense.description|default:"No description" }}</td>
-                <td>{{ expense.quantity }}</td>
-                <td>{{ expense.Category }}</td>
-                <td>
-                    <a href="{% url 'expense_edit' expense.id %}" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="{% url 'expense_delete' expense.id %}" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3 class="mb-3">Expense Categories</h3>
+            <div style="width: 300px; height: 400px; margin: 0 auto;">
+                <canvas id="expenseCategoryChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="mb-3">Monthly Expenses and Income</h3>
+            <div style="width: 500px; height: 300px; margin: 0 auto;">
+                <canvas id="monthlyExpensesIncomeChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Expense Category Chart
+        var ctxCategory = document.getElementById('expenseCategoryChart').getContext('2d');
+        new Chart(ctxCategory, {
+            type: 'pie',
+            data: {
+                labels: {{ category_labels|safe }},
+                datasets: [{
+                    data: {{ category_data|safe }},
+                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745', '#17a2b8', '#6f42c1', '#fd7e14', '#343a40']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false // Ensures the chart respects the specified size
+            }
+        });
+
+        // Monthly Expenses and Income Chart
+        var ctxMonthly = document.getElementById('monthlyExpensesIncomeChart').getContext('2d');
+        new Chart(ctxMonthly, {
+            type: 'bar',
+            data: {
+                labels: {{ monthly_labels|safe }},
+                datasets: [
+                    {
+                        label: 'Expenses',
+                        data: {{ monthly_expenses|safe }},
+                        backgroundColor: '#dc3545'
+                    },
+                    {
+                        label: 'Income',
+                        data: {{ monthly_income|safe }},
+                        backgroundColor: '#28a745'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, 
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

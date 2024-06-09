@@ -6,11 +6,21 @@
     <div class="row">
         <div class="col-md-6">
             <h3>Pie Chart - Expense Distribution</h3>
-            <canvas id="pieChart"></canvas>
+            <canvas id="pieChart" style="max-width: 300px; max-height: 300px;"></canvas>
         </div>
         <div class="col-md-6">
-            <h3>Bar Chart - Monthly Expense and Income</h3>
-            <canvas id="barChart"></canvas>
+            <h3>Line Chart - Daily Expenses and Income</h3>
+            <canvas id="lineChart" style="max-width: 300px; max-height: 300px;"></canvas>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3>Donut Chart - Savings Distribution</h3>
+            <canvas id="donutChart" style="max-width: 300px; max-height: 300px;"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h3>Histogram - Expense Frequency</h3>
+            <canvas id="histogramChart" style="max-width: 300px; max-height: 300px;"></canvas>
         </div>
     </div>
 </div>
@@ -33,29 +43,58 @@
             }]
         };
 
-        // Data for the bar chart
-        var monthlyExpense = {{ monthly_expense|safe }};
-        var monthlyIncome = {{ monthly_income|safe }};
-        var barLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // Data for the line chart (daily expenses and income for the last 30 days)
+        var dailyData = {{ daily_data|safe }};
+        var lineLabels = dailyData.map(item => item.date);
+        var lineExpenses = dailyData.map(item => item.expense);
+        var lineIncome = dailyData.map(item => item.income);
 
-        var barChartData = {
-            labels: barLabels,
+        var lineChartData = {
+            labels: lineLabels,
             datasets: [
                 {
-                    label: 'Expenses',
-                    data: monthlyExpense,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    label: 'Daily Expenses',
+                    data: lineExpenses,
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
+                    fill: false
                 },
                 {
-                    label: 'Income',
-                    data: monthlyIncome,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    label: 'Daily Income',
+                    data: lineIncome,
                     borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
+                    fill: false
                 }
             ]
+        };
+
+        // Data for the donut chart (savings distribution)
+        var savingsData = {{ savings_data|safe }};
+        var donutLabels = Object.keys(savingsData);
+        var donutValues = donutLabels.map(label => savingsData[label]);
+        var donutColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+
+        var donutChartData = {
+            labels: donutLabels,
+            datasets: [{
+                data: donutValues,
+                backgroundColor: donutColors,
+            }]
+        };
+
+        // Data for the histogram (expense frequency)
+        var histogramData = {{ histogram_data|safe }};
+        var histogramLabels = histogramData.labels;
+        var histogramValues = histogramData.values;
+
+        var histogramChartData = {
+            labels: histogramLabels,
+            datasets: [{
+                label: 'Expense Frequency',
+                data: histogramValues,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
         };
 
         // Create pie chart
@@ -65,11 +104,25 @@
             data: pieChartData
         });
 
-        // Create bar chart
-        var ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
+        // Create line chart
+        var ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: lineChartData
+        });
+
+        // Create donut chart
+        var ctxDonut = document.getElementById('donutChart').getContext('2d');
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: donutChartData
+        });
+
+        // Create histogram chart
+        var ctxHistogram = document.getElementById('histogramChart').getContext('2d');
+        new Chart(ctxHistogram, {
             type: 'bar',
-            data: barChartData
+            data: histogramChartData
         });
     });
 </script>

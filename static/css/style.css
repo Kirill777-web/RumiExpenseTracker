@@ -94,6 +94,12 @@ footer {
     margin-top: 20px;
 }
 
+/* Stats container specific styles */
+.stats-container {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
 /* Narrow container for profile, login, and register pages */
 .narrow-container {
     max-width: 400px; 
