@@ -1,0 +1,236 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+#wrapper {
+    display: flex;
+    flex: 1;
+}
+
+#sidebar-wrapper {
+    width: 250px;
+    flex-shrink: 0;
+    background-color: #343a40;
+}
+
+.sidebar-heading {
+    font-size: 1.5em;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    background-color: #343a40;
+    border-bottom: 1px solid #484848;
+}
+
+.list-group-item-action {
+    padding: 10px 15px;
+    color: white;
+    border: none;
+    border-bottom: 1px solid #484848;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.list-group-item-action:hover {
+    background-color: #b5bd44 !important;
+    color: white !important;
+}
+
+#page-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navbar {
+    height: 50px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 50px;
+}
+
+.container-fluid {
+    flex: 1;
+    padding: 20px;
+}
+
+footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e7e7e7;
+    padding: 10px;
+    text-align: center;
+    padding-left: 250px;
+}
+
+/* Custom button styles */
+.btn-primary {
+    margin: 10px 0;
+}
+
+/* Custom table styles */
+.table {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Custom container styles */
+.container {
+    margin-top: 20px;
+}
+
+/* Stats container specific styles */
+.stats-container {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+/* Narrow container for profile, login, and register pages */
+.narrow-container {
+    max-width: 400px; 
+    padding: 10px; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Smaller container and card adjustments */
+.narrow-container {
+    max-width: 500px; 
+    padding: 10px; 
+}
+
+/* Smaller container and card adjustments */
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px; 
+    margin-top: 10px; 
+    font-size: 0.8em; /
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+/* Form group styles */
+.form-group {
+    margin-bottom: 8px; 
+}
+
+/* Input field styles */
+.form-control {
+    width: 100%;
+    padding: 6px; 
+    margin-top: 5px;
+    font-size: 0.8em; 
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 8px; 
+    font-size: 0.8em; 
+    width: 25%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+}
+
+.btn-logout {
+    background-color: #dc3545;
+    border: none;
+    padding: 8px;
+    font-size: 0.8em;
+    width: 25%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Error message styles */
+.text-danger {
+    margin-top: 5px;
+    font-size: 0.7em; 
+}
+
+/* Custom header styles */
+h1, h2 {
+    color: #343a40;
+    text-align: center;
+    margin-bottom: 15px; 
+    font-size: 1em; 
+}
+
+/* Profile Picture Styling */
+.img-thumbnail {
+    margin: 0 auto;
+    display: block;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 10px;
+}
+
+/* Sidebar item icons */
+.list-group-item-action i {
+    margin-right: 10px;
+}
+
+/* Dashboard-specific styles */
+.dashboard-container {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+/* Smaller card headers and titles */
+.card-header {
+    font-size: 1em;
+}
+
+.card-title {
+    font-size: 1.25em;
+}
+
+/* Make the charts smaller */
+.card-body canvas {
+    max-height: 250px;
+}
+
+/* Adjust Recent Transactions */
+.recent-transactions {
+    max-height: 300px;
+    overflow-y: auto;
+}
