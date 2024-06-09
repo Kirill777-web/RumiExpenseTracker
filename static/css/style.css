@@ -1,5 +1,19 @@
 body {
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+#wrapper {
+    display: flex;
+    flex: 1;
+}
+
+#sidebar-wrapper {
+    width: 250px;
+    flex-shrink: 0;
 }
 
 .sidebar-heading {
@@ -18,10 +32,63 @@ body {
     padding: 10px 15px;
 }
 
+#page-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .container-fluid {
+    flex: 1;
     padding: 20px;
 }
 
+footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e7e7e7;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Custom button styles */
 .btn-primary {
     margin: 10px 0;
+}
+
+/* Custom table styles */
+.table {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Custom container styles */
+.container {
+    margin-top: 40px;
+}
+
+/* Custom header styles */
+h1, h2 {
+    color: #343a40;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Profile Picture Styling */
+.img-thumbnail {
+    margin: 0 auto;
+    display: block;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 20px;
 }

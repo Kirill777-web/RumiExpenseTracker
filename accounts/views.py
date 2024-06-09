@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as dj_login
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
 from .models import UserProfile
@@ -55,8 +57,8 @@ def handlelogin(request):
             return redirect('/expenses/index/')
         else:
             messages.error(request, "Invalid Credentials, Please try again")
-            return redirect('home')
-    return HttpResponse('404 - Not Found')
+            return redirect('login')
+    return render(request, 'accounts/login.html')
 
 
 def handleLogout(request):
@@ -67,10 +69,23 @@ def handleLogout(request):
     return redirect('home')
 
 
+@login_required
 def profile(request):
-    if request.session.has_key('is_logged'):
-        return render(request, 'accounts/profile.html')
-    return redirect('home')
+    user_profile, created = UserProfile.objects.get_or_create(
+        user=request.user)
+    if request.method == 'POST':
+        user_profile.profession = request.POST.get('profession')
+        user_profile.savings = request.POST.get('savings')
+        user_profile.income = request.POST.get('income')
+
+        # Handle profile picture upload
+        if 'image' in request.FILES:
+            user_profile.image = request.FILES['image']
+
+        user_profile.save()
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('profile')
+    return render(request, 'accounts/profile.html', {'profile': user_profile})
 
 
 def profile_edit(request, id):

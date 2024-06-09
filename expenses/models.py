@@ -11,6 +11,7 @@ SELECT_CATEGORY_CHOICES = [
     ('Shopping', 'Shopping'),
     ('Rent', 'Rent'),
     ('Bills', 'Bills'),
+    ('Salary', 'Salary'),
 ]
 
 ADD_EXPENSE_CHOICES = [
@@ -23,6 +24,7 @@ class AddMoneyInfo(models.Model):
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     add_money = models.CharField(max_length=10, choices=ADD_EXPENSE_CHOICES)
     quantity = models.BigIntegerField()
+    description = models.TextField(max_length=100)
     Date = models.DateTimeField(default=now)
     Category = models.CharField(
         max_length=20, choices=SELECT_CATEGORY_CHOICES, default='Shopping')

@@ -2,26 +2,37 @@
 
 {% block content %}
 <div class="container">
-    <h2>Add Money</h2>
-    <form method="POST" action="{% url 'addmoney_submission' %}">
+    <h2>{% if add_money %}Update Entry{% else %}Add Entry{% endif %}</h2>
+    <form method="POST" action="{% if add_money %}{% url 'addmoney_update' id %}{% else %}{% url 'addmoney_submission' %}{% endif %}">
         {% csrf_token %}
         <div class="form-group">
-            <label for="add_money">Add Money:</label>
-            <input type="text" class="form-control" id="add_money" name="add_money" required>
+            <label for="add_money">Type:</label>
+            <select class="form-control" id="add_money" name="add_money" required>
+                <option value="Income" {% if add_money == 'Income' %}selected{% endif %}>Income</option>
+                <option value="Expense" {% if add_money == 'Expense' %}selected{% endif %}>Expense</option>
+            </select>
         </div>
         <div class="form-group">
-            <label for="quantity">Quantity:</label>
-            <input type="number" class="form-control" id="quantity" name="quantity" required>
+            <label for="quantity">Amount:</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" value="{{ quantity|default_if_none:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description" name="description" value="{{ description|default_if_none:'' }}" required>
         </div>
         <div class="form-group">
             <label for="Date">Date:</label>
-            <input type="date" class="form-control" id="Date" name="Date" required>
+            <input type="date" class="form-control" id="Date" name="Date" value="{{ Date|default_if_none:''|date:'Y-m-d' }}" required>
         </div>
         <div class="form-group">
             <label for="Category">Category:</label>
-            <input type="text" class="form-control" id="Category" name="Category" required>
+            <select class="form-control" id="Category" name="Category" required>
+                {% for category in categories %}
+                <option value="{{ category }}" {% if Category == category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">{% if add_money %}Update{% else %}Submit{% endif %}</button>
     </form>
 </div>
 {% endblock %}

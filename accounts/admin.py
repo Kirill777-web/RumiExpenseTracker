@@ -5,7 +5,7 @@ from .models import UserProfile
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'profession', 'Savings', 'income']
+    list_display = ['user', 'profession', 'savings', 'income']
     search_fields = ['user__username', 'profession']
 
 

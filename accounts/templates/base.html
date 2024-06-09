@@ -14,7 +14,7 @@
         <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="sidebar-heading">Expense Tracker</div>
             <div class="list-group list-group-flush">
-                <a href="{% url 'home' %}" class="list-group-item list-group-item-action bg-light">Home</a>
+                {% comment %} <a href="{% url 'home' %}" class="list-group-item list-group-item-action bg-light">Home</a> {% endcomment %}
                 <a href="{% url 'index' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
                 <a href="{% url 'addmoney' %}" class="list-group-item list-group-item-action bg-light">Add Money</a>
                 <a href="{% url 'profile' %}" class="list-group-item list-group-item-action bg-light">Profile</a>
@@ -22,8 +22,8 @@
                 <a href="{% url 'charts' %}" class="list-group-item list-group-item-action bg-light">Charts</a>
                 <a href="{% url 'tables' %}" class="list-group-item list-group-item-action bg-light">Tables</a>
                 <a href="{% url 'weekly' %}" class="list-group-item list-group-item-action bg-light">Weekly</a>
-                <a href="{% url 'info' %}" class="list-group-item list-group-item-action bg-light">Info</a>
-                <a href="{% url 'info_year' %}" class="list-group-item list-group-item-action bg-light">Yearly Info</a>
+                <a href="{% url 'expense_month' %}" class="list-group-item list-group-item-action bg-light">Monthly</a>
+                <a href="{% url 'info_year' %}" class="list-group-item list-group-item-action bg-light">Yearly</a>
                 <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a>
             </div>
             <div class="sidebar-footer text-center">
@@ -46,6 +46,10 @@
         <!-- /#page-content-wrapper -->
     </div>
     <!-- /#wrapper -->
+     <!-- Footer -->
+    <footer>
+        <p>Expense Tracker &copy; 2024</p>
+    </footer>
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

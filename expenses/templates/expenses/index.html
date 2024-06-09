@@ -2,14 +2,67 @@
 
 {% block content %}
 <div class="container">
-    <h2>Expenses</h2>
-    <ul class="list-group">
+    <h2 class="mt-4 mb-4">Dashboard</h2>
+
+    <!-- Statistics Summary -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Total Income</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_income }}$</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Total Expenses</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ total_expenses }}$</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Remaining Balance</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ remaining_balance }}$</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Income vs Expenses</div>
+                <div class="card-body">
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Category Breakdown</div>
+                <div class="card-body">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <h3 class="mb-3">Recent Transactions</h3>
+    <ul class="list-group mb-4">
         {% for expense in page_obj %}
             <li class="list-group-item">
-                {{ expense.description }}: {{ expense.quantity }} - {{ expense.Category }} ({{ expense.Date }})
+                {{ forloop.counter }}. {{ expense.add_money }}: {{ expense.quantity }}$ - {{ expense.Category }} ({{ expense.Date|date:"F j, Y, g:i a" }})
             </li>
         {% endfor %}
     </ul>
+    
+    <!-- Pagination -->
     <div class="pagination mt-3">
         <nav>
             <ul class="pagination">
@@ -28,4 +81,49 @@
         </nav>
     </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Income vs Expenses Chart
+        var ctxIncomeExpense = document.getElementById('incomeExpenseChart').getContext('2d');
+        new Chart(ctxIncomeExpense, {
+            type: 'bar',
+            data: {
+                labels: ['Income', 'Expenses'],
+                datasets: [{
+                    label: 'Amount ($)',
+                    data: [{{ total_income }}, {{ total_expenses }}],
+                    backgroundColor: ['#28a745', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Category Breakdown Chart
+        var ctxCategory = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctxCategory, {
+            type: 'pie',
+            data: {
+                labels: {{ category_labels|safe }},
+                datasets: [{
+                    label: 'Amount ($)',
+                    data: {{ category_data|safe }},
+                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745', '#17a2b8', '#6f42c1', '#fd7e14', '#343a40']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    });
+</script>
 {% endblock %}

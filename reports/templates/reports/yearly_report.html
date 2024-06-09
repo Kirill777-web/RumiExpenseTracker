@@ -2,32 +2,53 @@
 
 {% block content %}
 <div class="container">
-    <h2>Yearly Report</h2>
-    <div>
-        <p>Total Expenses: {{ sum_expenses }}</p>
-        <p>Total Income: {{ sum_income }}</p>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in addmoney_info %}
-            <tr>
-                <td>{{ item.Date }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.Category }}</td>
-                <td>{{ item.add_money }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h2>Yearly Expense and Income Report</h2>
+    <canvas id="yearlyChart" width="400" height="200"></canvas>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('yearlyChart').getContext('2d');
+        var expenseData = {{ expense_category_data|safe }};
+        var labels = Object.keys(expenseData);
+        var expenseAmounts = labels.map(label => expenseData[label].expense);
+        var incomeAmounts = labels.map(label => expenseData[label].income);
+
+        var data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Expenses',
+                    data: expenseAmounts,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Income',
+                    data: incomeAmounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    });
+</script>
 {% endblock %}

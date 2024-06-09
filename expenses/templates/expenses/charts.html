@@ -5,11 +5,11 @@
     <h1>Charts</h1>
     <div class="row">
         <div class="col-md-6">
-            <h3>Pie Chart</h3>
+            <h3>Pie Chart - Expense Distribution</h3>
             <canvas id="pieChart"></canvas>
         </div>
         <div class="col-md-6">
-            <h3>Bar Chart</h3>
+            <h3>Bar Chart - Monthly Expense and Income</h3>
             <canvas id="barChart"></canvas>
         </div>
     </div>
@@ -18,37 +18,59 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Data for the pie chart
-    var pieData = {
-        labels: ['Category 1', 'Category 2', 'Category 3'],
-        datasets: [{
-            data: [10, 20, 30],
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        }]
-    };
+    document.addEventListener('DOMContentLoaded', function() {
+        // Data for the pie chart
+        var expenseCategoryData = {{ expense_category_data|safe }};
+        var pieLabels = Object.keys(expenseCategoryData);
+        var pieData = pieLabels.map(label => expenseCategoryData[label].expense);
+        var pieColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
 
-    // Data for the bar chart
-    var barData = {
-        labels: ['January', 'February', 'March'],
-        datasets: [{
-            label: 'Expenses',
-            data: [30, 20, 50],
-            backgroundColor: '#36A2EB',
-        }]
-    };
+        var pieChartData = {
+            labels: pieLabels,
+            datasets: [{
+                data: pieData,
+                backgroundColor: pieColors,
+            }]
+        };
 
-    // Create pie chart
-    var ctxPie = document.getElementById('pieChart').getContext('2d');
-    new Chart(ctxPie, {
-        type: 'pie',
-        data: pieData
-    });
+        // Data for the bar chart
+        var monthlyExpense = {{ monthly_expense|safe }};
+        var monthlyIncome = {{ monthly_income|safe }};
+        var barLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    // Create bar chart
-    var ctxBar = document.getElementById('barChart').getContext('2d');
-    new Chart(ctxBar, {
-        type: 'bar',
-        data: barData
+        var barChartData = {
+            labels: barLabels,
+            datasets: [
+                {
+                    label: 'Expenses',
+                    data: monthlyExpense,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Income',
+                    data: monthlyIncome,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        // Create pie chart
+        var ctxPie = document.getElementById('pieChart').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: pieChartData
+        });
+
+        // Create bar chart
+        var ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: barChartData
+        });
     });
 </script>
 {% endblock %}
