@@ -1,4 +1,4 @@
-name: Deploy to Docker
+name: Deploy to Docker and Heroku
 
 on:
   push:
@@ -6,26 +6,41 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Build Docker image
     - name: Build Docker image
       run: docker build -t kirill7537/rumiexpensetracker:latest .
 
+    # Log in to Docker Hub
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Push Docker image
-      run: docker push kirill7537/rumiexpensetracker:latest:latest
+    # Push Docker image to Docker Hub
+    - name: Push Docker image to Docker Hub
+      run: docker push kirill7537/rumiexpensetracker:latest
 
-    - name: Deploy to server
+    # Log in to Heroku Container Registry
+    - name: Log in to Heroku Container Registry
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        ssh -i ${{ secrets.SSH_KEY }} user@yourserver << 'EOF'
-        docker pull yourusername/yourapp:latest
-        docker-compose -f /path/to/your/docker-compose.yml down
-        docker-compose -f /path/to/your/docker-compose.yml up -d
-        EOF
+        echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
+
+    # Tag and push Docker image to Heroku Container Registry
+    - name: Tag and push Docker image to Heroku Container Registry
+      run: |
+        docker tag kirill7537/rumiexpensetracker:latest registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+        docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+
+    # Release the Heroku app
+    - name: Release the Heroku app
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: |
+        heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
