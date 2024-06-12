@@ -1,0 +1,31 @@
+name: Deploy to Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build -t kirill7537/RumiExpenseTracker:latest .
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Push Docker image
+      run: docker push yourusername/yourapp:latest
+
+    - name: Deploy to server
+      run: |
+        ssh -i ${{ secrets.SSH_KEY }} user@yourserver << 'EOF'
+        docker pull yourusername/yourapp:latest
+        docker-compose -f /path/to/your/docker-compose.yml down
+        docker-compose -f /path/to/your/docker-compose.yml up -d
+        EOF

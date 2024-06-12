@@ -155,7 +155,7 @@ footer {
     border-radius: 8px;
     padding: 10px;
     margin-top: 10px;
-    font-size: 0.8em;
+    font-size: 1em;
 }
 
 .card-header {
@@ -175,13 +175,13 @@ footer {
 /* Form Styles */
 .form-group {
     margin-bottom: 8px;
-    margin-bottom: 10px; /* Form Styling */
+    margin-bottom: 5px; /* Form Styling */
 }
 
 .form-control {
     width: 100%;
     padding: 6px;
-    margin-top: 5px;
+    /* margin-top: 5px; */
     font-size: 0.8em;
 }
 
