@@ -1,6 +1,9 @@
-import datetime
-from django.utils import timezone
+import json
+import pytz
 import calendar
+import datetime
+from django.shortcuts import render
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -51,7 +54,6 @@ def index(request):
     return render(request, 'expenses/index.html', context)
 
 
-
 @login_required
 def addmoney(request):
     categories = ["Food", "Transport", "Entertainment",
@@ -87,7 +89,9 @@ def addmoney_update(request, id):
         add.add_money = request.POST["add_money"]
         add.quantity = request.POST["quantity"]
         add.description = request.POST.get("description", "No description")
-        add.Date = request.POST["Date"]
+        # Ensure the date is timezone-aware
+        add.Date = timezone.make_aware(
+            datetime.datetime.strptime(request.POST["Date"], '%Y-%m-%d'))
         add.Category = request.POST["Category"]
         add.save()
         return redirect('index')
@@ -193,11 +197,13 @@ def charts(request):
             histogram_data['values'][7] += 1
 
     context = {
-        'expense_category_data': finalrep,
-        'daily_data': daily_data,
-        'savings_data': savings_data,
-        'histogram_data': histogram_data
+        'expense_category_data': json.dumps(finalrep),
+        'daily_data': json.dumps(daily_data),
+        'savings_data': json.dumps(savings_data),
+        'histogram_data': json.dumps(histogram_data),
+        'todays_date': timezone.now().strftime('%Y-%m-%d')
     }
+
     return render(request, 'expenses/charts.html', context)
 
 
@@ -221,8 +227,9 @@ def stats(request):
         item.quantity for item in expenses if item.add_money == 'Expense')
     total_income = sum(
         item.quantity for item in expenses if item.add_money == 'Income')
-    remaining_savings = user_profile.savings + total_income - total_expenses
-    over_budget = max(0, total_expenses - user_profile.savings)
+    remaining_savings = (user_profile.savings or 0) + \
+        total_income - total_expenses
+    over_budget = max(0, total_expenses - (user_profile.savings or 0))
 
     # Data for expense category chart
     categories = expenses.values('Category').distinct()
@@ -262,6 +269,7 @@ def stats(request):
         'monthly_income': monthly_income,
         'top_expense_categories': top_expense_categories,
     }
+
     return render(request, 'expenses/stats.html', context)
 
 

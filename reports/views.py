@@ -1,4 +1,6 @@
+import json
 import datetime
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -9,66 +11,64 @@ from expenses.models import AddMoneyInfo
 def info_year(request):
     user1 = request.user
 
-    todays_date = datetime.date.today()
-    one_year_ago = todays_date - datetime.timedelta(days=365)
+    todays_date = timezone.now().date()  # Use timezone-aware now
+    start_of_year = datetime.date(todays_date.year, 1, 1)
+    end_of_year = datetime.date(todays_date.year, 12, 31)
+
     addmoney = AddMoneyInfo.objects.filter(
-        user=user1, Date__gte=one_year_ago, Date__lte=todays_date)
-    finalrep = {}
+        user=user1, Date__gte=start_of_year, Date__lte=end_of_year)
 
-    def get_Category(addmoney_info):
-        return addmoney_info.Category
+    months = [start_of_year + datetime.timedelta(days=i*30) for i in range(12)]
+    month_labels = [month.strftime('%B') for month in months]
 
-    Category_list = list(set(map(get_Category, addmoney)))
+    finalrep = {month.strftime('%B'): {'expense': 0, 'income': 0}
+                for month in months}
 
-    def get_category_amount(Category, add_money):
-        quantity = 0
-        filtered_by_category = addmoney.filter(
-            Category=Category, add_money=add_money)
-        for item in filtered_by_category:
-            quantity += item.quantity
-        return quantity
+    for item in addmoney:
+        month = item.Date.strftime('%B')
+        if item.add_money == 'Expense':
+            finalrep[month]['expense'] += item.quantity
+        else:
+            finalrep[month]['income'] += item.quantity
 
-    for y in Category_list:
-        finalrep[y] = {
-            'expense': get_category_amount(y, "Expense"),
-            'income': get_category_amount(y, "Income")
-        }
+    context = {
+        'expense_category_data': json.dumps(finalrep),
+        'month_labels': json.dumps(month_labels),
+        'todays_date': todays_date.strftime('%Y')
+    }
 
-    return render(request, 'reports/yearly_report.html', {'expense_category_data': finalrep})
+    return render(request, 'reports/yearly_report.html', context)
 
 
 @login_required
 def expense_month(request):
     user1 = request.user
 
-    todays_date = datetime.date.today()
-    one_month_ago = todays_date - datetime.timedelta(days=30)
+    todays_date = timezone.now().date()  # Use timezone-aware now
+    first_day_of_month = todays_date.replace(day=1)
+    last_day_of_month = (first_day_of_month + datetime.timedelta(days=32)
+                         ).replace(day=1) - datetime.timedelta(days=1)
+    days_in_month = (last_day_of_month - first_day_of_month).days + 1
+
+    days = [first_day_of_month +
+            datetime.timedelta(days=i) for i in range(days_in_month)]
+
     addmoney = AddMoneyInfo.objects.filter(
-        user=user1, Date__gte=one_month_ago, Date__lte=todays_date)
+        user=user1, Date__gte=first_day_of_month, Date__lte=last_day_of_month)
+
     finalrep = {}
 
-    def get_Category(addmoney_info):
-        return addmoney_info.Category
-
-    Category_list = list(set(map(get_Category, addmoney)))
-
-    def get_category_amount(Category, add_money):
-        quantity = 0
-        filtered_by_category = addmoney.filter(
-            Category=Category, add_money=add_money)
-        for item in filtered_by_category:
-            quantity += item.quantity
-        return quantity
-
-    for y in Category_list:
-        finalrep[y] = {
-            'expense': get_category_amount(y, "Expense"),
-            'income': get_category_amount(y, "Income")
+    for day in days:
+        day_str = day.strftime('%Y-%m-%d')
+        finalrep[day_str] = {
+            'expense': sum(item.quantity for item in addmoney if item.add_money == 'Expense' and item.Date.date() == day),
+            'income': sum(item.quantity for item in addmoney if item.add_money == 'Income' and item.Date.date() == day)
         }
 
     context = {
-        'expense_category_data': finalrep,
-        'todays_date': todays_date.strftime('%B %Y')
+        'expense_category_data': json.dumps(finalrep),
+        'todays_date': todays_date.strftime('%B %Y'),
+        'days': json.dumps([day.strftime('%Y-%m-%d') for day in days])
     }
     return render(request, 'reports/monthly_report.html', context)
 

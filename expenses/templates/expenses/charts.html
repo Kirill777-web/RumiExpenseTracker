@@ -27,10 +27,22 @@
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- JSON data for charts -->
+<script type="application/json" id="expenseCategoryData">{{ expense_category_data|safe }}</script>
+<script type="application/json" id="dailyData">{{ daily_data|safe }}</script>
+<script type="application/json" id="savingsData">{{ savings_data|safe }}</script>
+<script type="application/json" id="histogramData">{{ histogram_data|safe }}</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Parse JSON data for the charts
+        var expenseCategoryData = JSON.parse(document.getElementById('expenseCategoryData').textContent);
+        var dailyData = JSON.parse(document.getElementById('dailyData').textContent);
+        var savingsData = JSON.parse(document.getElementById('savingsData').textContent);
+        var histogramData = JSON.parse(document.getElementById('histogramData').textContent);
+
         // Data for the pie chart
-        var expenseCategoryData = {{ expense_category_data|safe }};
         var pieLabels = Object.keys(expenseCategoryData);
         var pieData = pieLabels.map(label => expenseCategoryData[label].expense);
         var pieColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
@@ -44,7 +56,6 @@
         };
 
         // Data for the line chart (daily expenses and income for the last 30 days)
-        var dailyData = {{ daily_data|safe }};
         var lineLabels = dailyData.map(item => item.date);
         var lineExpenses = dailyData.map(item => item.expense);
         var lineIncome = dailyData.map(item => item.income);
@@ -68,7 +79,6 @@
         };
 
         // Data for the donut chart (savings distribution)
-        var savingsData = {{ savings_data|safe }};
         var donutLabels = Object.keys(savingsData);
         var donutValues = donutLabels.map(label => savingsData[label]);
         var donutColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
@@ -82,9 +92,8 @@
         };
 
         // Data for the histogram (expense frequency)
-        var histogramData = {{ histogram_data|safe }};
-        var histogramLabels = histogramData.labels;
-        var histogramValues = histogramData.values;
+        var histogramLabels = histogramData.labels || [];
+        var histogramValues = histogramData.values || [];
 
         var histogramChartData = {
             labels: histogramLabels,

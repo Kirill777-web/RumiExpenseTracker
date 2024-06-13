@@ -3,21 +3,25 @@
 {% block content %}
 <div class="container">
     <h2>Monthly Expense and Income Report - {{ todays_date }}</h2>
-    <canvas id="monthlyChart" width="400" height="200"></canvas>
+    <canvas id="monthlyChart" width="300" height="200"></canvas>
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var ctx = document.getElementById('monthlyChart').getContext('2d');
-        var expenseData = {{ expense_category_data|safe }};
-        var labels = Object.keys(expenseData);
-        var expenseAmounts = labels.map(label => expenseData[label].expense);
-        var incomeAmounts = labels.map(label => expenseData[label].income);
+        var expenseData = JSON.parse('{{ expense_category_data|escapejs }}');
+        var days = JSON.parse('{{ days|escapejs }}');
+
+        var expenseAmounts = days.map(day => expenseData[day]?.expense || 0);
+        var incomeAmounts = days.map(day => expenseData[day]?.income || 0);
+
 
         var data = {
-            labels: labels,
+            labels: days,
             datasets: [
                 {
                     label: 'Expenses',
@@ -37,9 +41,62 @@
         };
 
         var options = {
+            plugins: {
+                datalabels: {
+                    display: true,
+                    color: 'black',
+                    align: 'end',
+                    anchor: 'end',
+                    formatter: function(value) {
+                        return '$' + value;
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Monthly Expense and Income',
+                    padding: {
+                        bottom: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += '$' + context.parsed.y;
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    align: 'center',
+                    labels: {
+                        padding: 20
+                    }
+                }
+            },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value;
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        padding: 10
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 20,
+                    bottom: 20
                 }
             }
         };
@@ -47,7 +104,8 @@
         new Chart(ctx, {
             type: 'bar',
             data: data,
-            options: options
+            options: options,
+            plugins: [ChartDataLabels]
         });
     });
 </script>

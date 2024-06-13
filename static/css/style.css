@@ -142,7 +142,7 @@ footer {
 
 /* Narrow Container Styles */
 .narrow-container {
-    max-width: 400px;
+    max-width: 560px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
