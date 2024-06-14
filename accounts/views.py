@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate, login as dj_login
 from django.contrib.auth import login as dj_login
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'expenses.apps.ExpensesConfig',
     'accounts.apps.AccountsConfig',
     'reports.apps.ReportsConfig',
+    'django.contrib.messages',
 ]
 
 # Middleware
