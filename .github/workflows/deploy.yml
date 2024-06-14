@@ -13,6 +13,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'  # Use your project's Python version
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Debug environment variables
+      run: env
+
+    - name: Collect static files
+      run: |
+        python manage.py collectstatic --noinput
+
     # Build Docker image
     - name: Build Docker image
       run: docker build -t kirill7537/rumiexpensetracker:latest .
@@ -44,8 +62,8 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
         heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
-        
-    # Fetch Heroku logs
+    
+    # Fetch Heroku logs    
     - name: Fetch Heroku logs
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
