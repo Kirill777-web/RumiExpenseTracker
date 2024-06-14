@@ -116,3 +116,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+# CRFS
+CSRF_COOKIE_SECURE = True
+SEESION_COOKIE_SECURE = True
+
+# CSRF TRUSTED ORIGINS
+CSRF_TRUSTED_ORIGINS = [
+    'https://ki-expense-tracker-117e440fa49f.herokuapp.com/']

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as dj_login
+from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
 from .models import UserProfile
@@ -58,6 +59,9 @@ def handlelogin(request):
         else:
             messages.error(request, "Invalid Credentials, Please try again")
             return redirect('login')
+    else:
+        # Ensure CSRF token is created for GET requests too
+        get_token(request)
     return render(request, 'accounts/login.html')
 
 
