@@ -118,9 +118,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
 
 # CRFS
-CSRF_COOKIE_SECURE = True
-SEESION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
 
 # CSRF TRUSTED ORIGINS
 CSRF_TRUSTED_ORIGINS = [
-    'https://ki-expense-tracker-117e440fa49f.herokuapp.com/']
+    'https://ki-expense-tracker-117e440fa49f.herokuapp.com']
+
+# Custom CSRF failure view
+CSRF_FAILURE_VIEW = 'path.to.custom_csrf_failure'
+
+# Ensure HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
