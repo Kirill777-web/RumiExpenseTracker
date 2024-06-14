@@ -16,19 +16,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.10'  # Use your project's Python version
+        python-version: '3.10'
 
     - name: Install dependencies
       run: |
         python -m venv venv
-        source venv/bin/activate
+        . venv/bin/activate
         pip install -r requirements.txt
-
-    - name: Debug environment variables
-      run: env
 
     - name: Collect static files
       run: |
+        . venv/bin/activate
         python manage.py collectstatic --noinput
 
     # Build Docker image
@@ -62,8 +60,8 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
         heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
-    
-    # Fetch Heroku logs    
+
+    # Fetch Heroku logs
     - name: Fetch Heroku logs
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
