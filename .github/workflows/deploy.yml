@@ -55,10 +55,11 @@ jobs:
       run: |
         heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
 
-    - name: Run migrations on Heroku
+    - name: Run makemigrations and migrate on Heroku
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
+        heroku run python manage.py makemigrations --app ${{ secrets.HEROKU_APP_NAME }}
         heroku run python manage.py migrate --app ${{ secrets.HEROKU_APP_NAME }}
 
     - name: Fetch Heroku logs
