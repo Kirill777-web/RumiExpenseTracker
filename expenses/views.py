@@ -28,7 +28,11 @@ def index(request):
 
     # Get the user's initial income and savings
     initial_income = user1.userprofile.income
+    if initial_income is None:
+        initial_income = 0
     initial_savings = user1.userprofile.savings
+    if initial_savings is None:
+        initial_savings = 0
 
     total_income = initial_income + sum(
         item.quantity for item in addmoney_info if item.add_money == 'Income')
