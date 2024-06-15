@@ -18,7 +18,10 @@ def info_year(request):
     addmoney = AddMoneyInfo.objects.filter(
         user=user1, Date__gte=start_of_year, Date__lte=end_of_year)
 
-    months = [start_of_year + datetime.timedelta(days=i*30) for i in range(12)]
+    # fetch users initial income
+    initial_income = user1.userprofile.income
+
+    months = [datetime.date(todays_date.year, i, 1) for i in range(1, 13)]
     month_labels = [month.strftime('%B') for month in months]
 
     finalrep = {month.strftime('%B'): {'expense': 0, 'income': 0}
@@ -34,7 +37,8 @@ def info_year(request):
     context = {
         'expense_category_data': json.dumps(finalrep),
         'month_labels': json.dumps(month_labels),
-        'todays_date': todays_date.strftime('%Y')
+        'todays_date': todays_date.strftime('%Y'),
+        'initial_income': initial_income,
     }
 
     return render(request, 'reports/yearly_report.html', context)

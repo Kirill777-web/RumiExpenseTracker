@@ -9,16 +9,17 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.0"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var ctx = document.getElementById('yearlyChart').getContext('2d');
         var expenseData = JSON.parse('{{ expense_category_data|escapejs }}');
         var monthLabels = JSON.parse('{{ month_labels|escapejs }}');
+        var initialIncome = JSON.parse('{{ initial_income|escapejs }}');
 
         var expenseAmounts = monthLabels.map(month => expenseData[month]?.expense || 0);
         var incomeAmounts = monthLabels.map(month => expenseData[month]?.income || 0);
-
 
         var data = {
             labels: monthLabels,
@@ -75,6 +76,30 @@
                     align: 'center',
                     labels: {
                         padding: 20
+                    }
+                },
+                annotation: {
+                    annotations: {
+                        line1: {
+                            type: 'line',
+                            yMin: initialIncome,
+                            yMax: initialIncome,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            label: {
+                                content: 'Initial Income: $' + initialIncome,
+                                enabled: true,
+                                position: 'start',
+                                backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                                borderRadius: 4,
+                                padding: {
+                                    top: 6,
+                                    bottom: 6,
+                                    left: 10,
+                                    right: 10
+                                }
+                            }
+                        }
                     }
                 }
             },
