@@ -71,19 +71,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ExpenseTracker.wsgi.application'
 
 # Database
+DATABASES = {}
 if os.getenv('DJANGO_ENV') == 'production':
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('JAWSDB_URL')
-        )
-    }
+    DATABASES['default'] = dj_database_url.config(
+        default=os.getenv('JAWSDB_URL'))
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -133,6 +130,5 @@ CSRF_FAILURE_VIEW = 'accounts.views.custom_csrf_failure'
 
 # Ensure HTTPS
 if not DEBUG:
-    # Ensure HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
