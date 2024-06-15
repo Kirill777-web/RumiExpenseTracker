@@ -225,3 +225,11 @@ h1, h2 {
     max-height: 300px;
     overflow-y: auto;
 }
+/* Success messages */
+.alert-success {
+    color: green;
+}
+
+.alert-error {
+    color: red;
+}

@@ -125,11 +125,14 @@ SESSION_COOKIE_HTTPONLY = True
 
 # CSRF TRUSTED ORIGINS
 CSRF_TRUSTED_ORIGINS = [
-    'https://ki-expense-tracker-117e440fa49f.herokuapp.com']
+    'https://ki-expense-tracker-117e440fa49f.herokuapp.com',
+    'http://localhost:8000']
 
 # Custom CSRF failure view
-CSRF_FAILURE_VIEW = 'path.to.custom_csrf_failure'
+CSRF_FAILURE_VIEW = 'accounts.views.custom_csrf_failure'
 
 # Ensure HTTPS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
+if not DEBUG:
+    # Ensure HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True

@@ -3,7 +3,6 @@ from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login
-from django.contrib.auth import login as dj_login
 from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
@@ -29,15 +28,14 @@ def handleSignup(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password1'])
             user.save()
-            UserProfile.objects.create(
-                user=user,
-                profession=form.cleaned_data['profession'],
-                savings=form.cleaned_data['savings'],
-                income=form.cleaned_data['income']
-            )
+            user.userprofile.profession = form.cleaned_data['profession']
+            user.userprofile.savings = form.cleaned_data['savings']
+            user.userprofile.income = form.cleaned_data['income']
+            user.userprofile.save()
+            dj_login(request, user)
             messages.success(
                 request, "Your account has been successfully created")
-            return redirect('login')
+            return redirect('index')
         else:
             messages.error(request, "Please correct the errors below.")
     else:

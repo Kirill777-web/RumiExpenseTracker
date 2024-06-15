@@ -26,18 +26,20 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    total_income = sum(
+    # Get the user's initial income and savings
+    initial_income = user1.userprofile.income
+    initial_savings = user1.userprofile.savings
+
+    total_income = initial_income + sum(
         item.quantity for item in addmoney_info if item.add_money == 'Income')
     total_expenses = sum(
         item.quantity for item in addmoney_info if item.add_money == 'Expense')
-    remaining_balance = total_income - total_expenses
+    remaining_balance = initial_savings + total_income - total_expenses
 
     # Clean up and aggregate categories
     categories = addmoney_info.annotate(
-        cleaned_category=Lower(Trim(F('Category')))
-    ).values('cleaned_category').annotate(
-        total_quantity=Sum('quantity')
-    ).order_by('cleaned_category')
+        cleaned_category=Lower(Trim(F('Category')))).values('cleaned_category').annotate(
+        total_quantity=Sum('quantity')).order_by('cleaned_category')
 
     category_labels = [category['cleaned_category'] for category in categories]
     category_data = [category['total_quantity'] for category in categories]
@@ -49,6 +51,8 @@ def index(request):
         'remaining_balance': remaining_balance,
         'category_labels': category_labels,
         'category_data': category_data,
+        'initial_income': initial_income,
+        'initial_savings': initial_savings
     }
 
     return render(request, 'expenses/index.html', context)
@@ -70,8 +74,10 @@ def addmoney_submission(request):
             add_money = request.POST["add_money"]
             quantity = request.POST["quantity"]
             description = request.POST.get("description", "No description")
-            Date = timezone.make_aware(datetime.datetime.strptime(
-                request.POST["Date"], '%Y-%m-%d'))
+            date_str = request.POST["Date"]
+            date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+            Date = timezone.make_aware(
+                date_obj, timezone.get_current_timezone())
             Category = request.POST["Category"]
             add = AddMoneyInfo(user=user1, add_money=add_money, quantity=quantity,
                                description=description, Date=Date, Category=Category)
@@ -89,9 +95,10 @@ def addmoney_update(request, id):
         add.add_money = request.POST["add_money"]
         add.quantity = request.POST["quantity"]
         add.description = request.POST.get("description", "No description")
-        # Ensure the date is timezone-aware
+        date_str = request.POST["Date"]
+        date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
         add.Date = timezone.make_aware(
-            datetime.datetime.strptime(request.POST["Date"], '%Y-%m-%d'))
+            date_obj, timezone.get_current_timezone())
         add.Category = request.POST["Category"]
         add.save()
         return redirect('index')
@@ -143,6 +150,8 @@ def charts(request):
     finalrep = {}
     for item in addmoney:
         category = item.Category
+        if category == 'Salary':
+            continue
         if category not in finalrep:
             finalrep[category] = {'expense': 0, 'income': 0}
         if item.add_money == 'Expense':
@@ -223,6 +232,7 @@ def stats(request):
 
     expenses = AddMoneyInfo.objects.filter(
         user=user1, Date__gte=one_month_ago, Date__lte=todays_date)
+
     total_expenses = sum(
         item.quantity for item in expenses if item.add_money == 'Expense')
     total_income = sum(
@@ -233,8 +243,9 @@ def stats(request):
 
     # Data for expense category chart
     categories = expenses.values('Category').distinct()
-    category_labels = [category['Category'] for category in categories]
-    category_data = [sum(item.quantity for item in expenses if item.Category == category)
+    category_labels = [category['Category']
+                       for category in categories if category['Category'] != 'Salary']
+    category_data = [sum(item.quantity for item in expenses if item.Category == category and item.add_money == 'Expense')
                      for category in category_labels]
 
     # Data for monthly expenses and income chart
@@ -253,8 +264,11 @@ def stats(request):
     monthly_labels = [calendar.month_name[i] for i in range(1, 13)]
 
     # Calculate top expense categories
+    expense_categories_data = [(label, data) for label, data in zip(category_labels, category_data) if label in [
+        item.Category for item in expenses if item.add_money == 'Expense']]
+
     top_expense_categories = sorted(
-        zip(category_labels, category_data), key=lambda x: x[1], reverse=True)[:5]
+        expense_categories_data, key=lambda x: x[1], reverse=True)[:5]
 
     context = {
         'total_expenses': total_expenses,
