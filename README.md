@@ -1,11 +1,9 @@
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-# RumiExpenseTracker
+# KI-ExpenseTracker
 
 ## Description
 
-RumiExpenseTracker is a comprehensive expense tracking web application designed for the book distribution company, Rumi Press. It allows users to track their income and expenses, categorize their financial data, and visualize their spending habits through various charts and reports. The application is built using Django, Python, and Bootstrap, and is designed to be user-friendly and responsive.
+KI-ExpenseTracker is a comprehensive expense tracking web application designed for the book distribution company, Rumi Press. It allows users to track their income and expenses, categorize their financial data, and visualize their spending habits through various charts and reports. The application is built using Django, Python, and Bootstrap, and is designed to be user-friendly and responsive.
 
 ## 📑 Table of Contents
 
@@ -19,9 +17,11 @@ RumiExpenseTracker is a comprehensive expense tracking web application designed 
 
 ## Screenshots
 
-  - ![Dashboard Screenshot](link_to_dashboard_screenshot)
-  - ![Profile Screenshot](link_to_profile_screenshot)
-  - ![Charts Screenshot](link_to_charts_screenshot)
+  - ![Dashboard Screenshot](/static/images/dashboard.png)
+  - ![Profile Screenshot](/static/images/Profile.png)
+  - ![Charts Screenshot](/static/images/charts.png)
+  - ![Yearly Chart Screenshot](/static/images/yearly_chart.png)
+  - ![Stats Screenshot](/static/images/stats.png)
 
 ## ✨ Features
 
@@ -52,4 +52,4 @@ Developed by [Kirill Lazutin]
 
 ## 🚀 Deployment
 
-- [Heroku Deployment Link](https://rumiexpensetracker.herokuapp.com)
+- [Heroku Deployment Link](https://ki-expense-tracker-117e440fa49f.herokuapp.com/)
