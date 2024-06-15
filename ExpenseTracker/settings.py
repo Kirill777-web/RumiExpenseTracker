@@ -1,8 +1,8 @@
 import os
-import logging
+from pathlib import Path
 import dj_database_url
 import django_heroku
-from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -70,7 +70,6 @@ else:
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 
-print("Database settings:", DATABASES)
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -122,27 +121,3 @@ CSRF_FAILURE_VIEW = 'accounts.views.custom_csrf_failure'
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
-
-# Logging
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
