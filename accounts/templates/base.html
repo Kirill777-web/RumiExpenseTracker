@@ -105,13 +105,30 @@
         // Get all forms on the page
     var forms = document.querySelectorAll('form');
 
-    // Add a submit event listener to each form
-    forms.forEach(function(form) {
-        form.addEventListener('submit', function() {
-            // Show the spinner when the form is submitted
-            document.getElementById('spinner').style.display = 'flex';
+    /// Add a submit event listener to each form
+forms.forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Show the spinner when the form is submitted
+        document.getElementById('spinner').style.display = 'flex';
+
+        // Perform the AJAX request
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: $(form).serialize(),
+            success: function() {
+                // Hide the spinner when the AJAX request is successful
+                document.getElementById('spinner').style.display = 'none';
+            },
+            error: function() {
+                // Hide the spinner if the AJAX request fails
+                document.getElementById('spinner').style.display = 'none';
+            }
         });
     });
+});
     </script>
 </body>
 </html>
