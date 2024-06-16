@@ -1,8 +1,7 @@
 import json
-import pytz
 import calendar
 import datetime
-from django.shortcuts import render
+from django.db.models import Q
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -10,12 +9,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.contrib import messages
-from accounts.models import UserProfile
-from .models import AddMoneyInfo
-
-
 from django.db.models import Sum, F, Value
 from django.db.models.functions import Lower, Trim
+from accounts.models import UserProfile
+from .models import AddMoneyInfo
 
 
 @login_required
@@ -137,7 +134,7 @@ def search(request):
     query = request.GET.get('q')
     if query:
         results = AddMoneyInfo.objects.filter(
-            description__icontains=query, user=request.user)
+            Q(description__icontains=query) | Q(Category_icontains=query), user=request.user)
     else:
         results = AddMoneyInfo.objects.none()
     context = {'results': results}
