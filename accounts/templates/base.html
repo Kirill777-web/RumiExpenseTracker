@@ -54,6 +54,12 @@
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
+         <div id="page-content-wrapper">
+    <!-- Spinner -->
+<div class="d-flex justify-content-center align-items-center" id="spinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.5);">
+    <img src="{% static '/static/images/loading.gif' %}" alt="Loading...">
+</div>
+</div>
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                 {% comment %} <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button> {% endcomment %}
@@ -61,6 +67,7 @@
                     {{ user.username }}
                 </div>
             </nav>
+            
 
             <!-- Display Messages -->
             {% if messages %}
@@ -95,6 +102,17 @@
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
+
+        // Get all forms on the page
+    var forms = document.querySelectorAll('form');
+
+    // Add a submit event listener to each form
+    forms.forEach(function(form) {
+        form.addEventListener('submit', function() {
+            // Show the spinner when the form is submitted
+            document.getElementById('spinner').style.display = 'flex';
+        });
+    });
     </script>
 </body>
 </html>
