@@ -226,6 +226,10 @@ h1, h2 {
     overflow-y: auto;
 }
 /* Success messages */
+
+.alert{
+    text-align: center;
+}
 .alert-success {
     color: green;
 }
