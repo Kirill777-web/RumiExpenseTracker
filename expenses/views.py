@@ -134,7 +134,7 @@ def search(request):
     query = request.GET.get('q')
     if query:
         results = AddMoneyInfo.objects.filter(
-            Q(description__icontains=query) | Q(Category_icontains=query), user=request.user)
+            Q(description__icontains=query) | Q(Category__icontains=query), user=request.user)
     else:
         results = AddMoneyInfo.objects.none()
     context = {'results': results}
