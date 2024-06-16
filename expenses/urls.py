@@ -11,5 +11,5 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('charts/', views.charts, name='charts'),
     path('stats/', views.stats, name='stats'),
-    path('tables/', views.tables, name='tables'),  # Ensure this line exists
+    path('tables/', views.tables, name='tables'),
 ]
