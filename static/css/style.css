@@ -229,6 +229,7 @@ h1, h2 {
 
 .alert{
     text-align: center;
+    margin-bottom: 0;
 }
 .alert-success {
     color: green;
@@ -239,7 +240,6 @@ h1, h2 {
 }
 /* Search Page */
 
-/* Search Page Styles */
 
 /* Search Bar Styles */
 .search-bar {
@@ -299,4 +299,16 @@ h1, h2 {
     left: 56%; 
     transform: translate(-50%, -50%);
     z-index: 9999; 
+}
+
+/* Profile form */
+.styled-plaintext {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: #495057;
 }

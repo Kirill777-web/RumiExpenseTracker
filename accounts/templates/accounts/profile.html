@@ -3,45 +3,61 @@
 {% block content %}
 <div class="container narrow-container">
     <h2 class="mt-4 mb-4">Profile</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <!-- Profile Picture Section -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                {% if profile.image %}
-                    <img src="{{ profile.image.url }}" alt="Profile Picture" class="img-thumbnail" style="width: 200px; height: 200px;">
-                {% else %}
-                    <img src="{% static 'images/raoul-droog.jpg' %}" alt="Default Profile Picture" class="img-thumbnail" style="width: 200px; height: 200px;">
-                {% endif %}
+    
+    <!-- Profile Picture Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            {% if profile.image %}
+                <img src="{{ profile.image.url }}" alt="Profile Picture" class="img-thumbnail" style="width: 200px; height: 200px;">
+            {% else %}
+                <img src="{% static 'images/raoul-droog.jpg' %}" alt="Default Profile Picture" class="img-thumbnail" style="width: 200px; height: 200px;">
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- User Information Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="form-group row">
+                <label for="fname" class="col-sm-3 col-form-label">First Name:</label>
+                <div class="col-sm-9">
+                    <div class="form-control-plaintext styled-plaintext">{{ profile.user.first_name }}</div>
+                </div>
             </div>
-            <div class="col-md-8">
-                <div class="form-group">
-                    <label for="image">Profile Picture:</label>
-                    <input type="file" class="form-control-file" id="image" name="image">
+            <div class="form-group row">
+                <label for="lname" class="col-sm-3 col-form-label">Last Name:</label>
+                <div class="col-sm-9">
+                    <div class="form-control-plaintext styled-plaintext">{{ profile.user.last_name }}</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-3 col-form-label">Email:</label>
+                <div class="col-sm-9">
+                    <div class="form-control-plaintext styled-plaintext">{{ profile.user.email }}</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="savings" class="col-sm-3 col-form-label">Savings:</label>
+                <div class="col-sm-9">
+                    <div class="form-control-plaintext styled-plaintext">{{ profile.savings }}</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="income" class="col-sm-3 col-form-label">Income:</label>
+                <div class="col-sm-9">
+                    <div class="form-control-plaintext styled-plaintext">{{ profile.income }}</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="profession" class="col-sm-3 col-form-label">Profession:</label>
+                <div class="col-sm-9">
+                    <div class="form-control-plaintext styled-plaintext">{{ profile.profession }}</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Profession Section -->
-        <div class="form-group">
-            <label for="profession">Profession:</label>
-            <input type="text" class="form-control" id="profession" name="profession" value="{{ profile.profession }}" required>
-        </div>
-
-        <!-- Savings Section -->
-        <div class="form-group">
-            <label for="savings">Savings:</label>
-            <input type="number" class="form-control" id="savings" name="savings" value="{{ profile.savings }}" required>
-        </div>
-
-        <!-- Income Section -->
-        <div class="form-group">
-            <label for="income">Income:</label>
-            <input type="number" class="form-control" id="income" name="income" value="{{ profile.income }}" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
+    <!-- Edit Button -->
+    <a href="{% url 'profile_edit' %}" class="btn btn-primary">Edit</a>
 </div>
 {% endblock %}

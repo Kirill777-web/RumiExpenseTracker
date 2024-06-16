@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login
 from django.middleware.csrf import get_token
@@ -78,37 +78,32 @@ def handleLogout(request):
 def profile(request):
     user_profile, created = UserProfile.objects.get_or_create(
         user=request.user)
-    if request.method == 'POST':
-        user_profile.profession = request.POST.get('profession')
-        user_profile.savings = request.POST.get('savings')
-        user_profile.income = request.POST.get('income')
-
-        if 'image' in request.FILES:
-            user_profile.image = request.FILES['image']
-
-        user_profile.save()
-        messages.success(request, 'Profile updated successfully.')
-        return redirect('index')
     return render(request, 'accounts/profile.html', {'profile': user_profile})
 
 
 @login_required
-def profile_edit(request, id):
-    user = get_object_or_404(User, id=id, user=request.user)
-    return render(request, 'accounts/profile_edit.html', {'user': user})
+def profile_edit(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    return render(request, 'accounts/profile_edit.html', {'profile': user_profile})
 
 
 @login_required
-def profile_update(request, id):
-    user = get_object_or_404(User, id=id, user=request.user)
-    if request.method == "POST":
-        user.first_name = request.POST["fname"]
-        user.last_name = request.POST["lname"]
-        user.email = request.POST["email"]
-        user.userprofile.savings = request.POST["savings"]
-        user.userprofile.income = request.POST["income"]
-        user.userprofile.profession = request.POST["profession"]
-        user.userprofile.save()
-        user.save()
-        return redirect('index')
-    return redirect('home')
+def profile_update(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == 'POST':
+        user_profile.user.first_name = request.POST.get('fname')
+        user_profile.user.last_name = request.POST.get('lname')
+        user_profile.user.email = request.POST.get('email')
+        user_profile.savings = request.POST.get('savings')
+        user_profile.income = request.POST.get('income')
+        user_profile.profession = request.POST.get('profession')
+
+        if 'image' in request.FILES:
+            user_profile.image = request.FILES['image']
+
+        user_profile.user.save()
+        user_profile.save()
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('profile')
+
+    return render(request, 'accounts/profile_edit.html', {'profile': user_profile})
