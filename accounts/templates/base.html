@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-     <link rel="icon" type="image/x-icon" href="{% static 'icons/statistics.png' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/statistics.png' %}">
 </head>
 <body>
     <div class="d-flex" id="wrapper">
@@ -56,17 +56,15 @@
         <!-- Page Content -->
         <div id="page-content-wrapper" style="position: relative;">
             <!-- Spinner -->
-    <div class="d-flex justify-content-center align-items-center" id="spinner" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.5);">
-        <img src="{% static 'images/loading.gif' %}" alt="Loading...">
-    </div>
+            <div id="spinner">
+                <img src="{% static 'images/loading.gif' %}" alt="Loading...">
+            </div>
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                {% comment %} <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button> {% endcomment %}
                 <div class="ml-auto">
                     {{ user.username }}
                 </div>
             </nav>
-            
 
             <!-- Display Messages -->
             {% if messages %}
@@ -87,13 +85,13 @@
         <!-- /#page-content-wrapper -->
     </div>
     <!-- /#wrapper -->
-     <!-- Footer -->
+    <!-- Footer -->
     <footer>
         <p>Expense Tracker &copy; Made by Kirill Lazutin 2024</p>
     </footer>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- jQuery and Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
@@ -103,32 +101,37 @@
         });
 
         // Get all forms on the page
-    var forms = document.querySelectorAll('form');
+        var forms = document.querySelectorAll('form');
 
-    /// Add a submit event listener to each form
-forms.forEach(function(form) {
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+        // Add a submit event listener to each form
+        forms.forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting normally
 
-        // Show the spinner when the form is submitted
-        document.getElementById('spinner').style.display = 'flex';
+                // Show the spinner when the form is submitted
+                document.getElementById('spinner').style.display = 'flex';
 
-        // Perform the AJAX request
-        $.ajax({
-            url: form.action,
-            type: form.method,
-            data: $(form).serialize(),
-            success: function() {
-                // Hide the spinner when the AJAX request is successful
-                document.getElementById('spinner').style.display = 'none';
-            },
-            error: function() {
-                // Hide the spinner if the AJAX request fails
-                document.getElementById('spinner').style.display = 'none';
-            }
+                var formData = $(form).serialize();
+
+                // Perform the AJAX request
+                $.ajax({
+                    url: form.action,
+                    type: form.method,
+                    data: formData,
+                    success: function(response) {
+                        // Replace the form's content with the response (or handle as needed)
+                        $('#page-content-wrapper').html($(response).find('#page-content-wrapper').html());
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                    },
+                    complete: function() {
+                        // Hide the spinner and the overlay when the AJAX request is complete
+                        document.getElementById('spinner').style.display = 'none';
+                    }
+                });
+            });
         });
-    });
-});
     </script>
 </body>
 </html>

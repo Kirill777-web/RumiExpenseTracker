@@ -290,3 +290,13 @@ h1, h2 {
 .search-results-item:last-child {
     border-bottom: none;
 }
+
+/* Spinner */
+#spinner {
+    display: none;
+    position: fixed; 
+    top: 60%; 
+    left: 56%; 
+    transform: translate(-50%, -50%);
+    z-index: 9999; 
+}

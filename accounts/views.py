@@ -88,7 +88,7 @@ def profile(request):
 
         user_profile.save()
         messages.success(request, 'Profile updated successfully.')
-        return redirect('profile')
+        return redirect('index')
     return render(request, 'accounts/profile.html', {'profile': user_profile})
 
 
@@ -110,5 +110,5 @@ def profile_update(request, id):
         user.userprofile.profession = request.POST["profession"]
         user.userprofile.save()
         user.save()
-        return redirect('profile')
+        return redirect('index')
     return redirect('home')
